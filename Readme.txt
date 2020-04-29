@@ -1,8 +1,6 @@
 Hey Team,
 
-Here's the link of my GitHub repo: https://github.com/prateekjaindev/Cloud-DevOps-Engineer-Capstone-Project
+GitHub repo: git@github.com:zhouji1993/devops-capstone.git
 
-Docker Hub: https://hub.docker.com/u/prateekjain
+Docker Hub: https://hub.docker.com/u/zhouji1993
 
-Thanks
-Prateek
