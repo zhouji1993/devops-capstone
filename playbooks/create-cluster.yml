@@ -4,7 +4,7 @@
   vars:
     download_dir: "{{ lookup('env', 'HOME') }}"
     kubernetes_version: "1.14"
-  become: yes
+  become: true
   become_method: sudo
   tasks:
     # Ensure aws cli is installed and configured on local before running these plays
