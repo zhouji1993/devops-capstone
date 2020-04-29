@@ -36,7 +36,7 @@ pipeline {
             stage('Configure and Build Kubernetes Cluster'){
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'sudo ansible-playbook ./playbooks/create-cluster.yml'
+                    sh 'sudo -S ansible-playbook ./playbooks/create-cluster.yml'
                     }
                 }
             }
