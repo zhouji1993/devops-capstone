@@ -1,0 +1,214 @@
+Console Output
+Started by user zhouji@jenkins
+Replayed #32
+17:12:41 Connecting to https://api.github.com using zhouji/****** (GitHub Access Token)
+Obtained Jenkinsfile from 850557eb153ad9e721bac4f24c09d07088f5ae3c
+Running in Durability level: MAX_SURVIVABILITY
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/devops-capstone_master
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+using credential github
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/zhouji1993/devops-capstone.git # timeout=10
+Cleaning workspace
+ > git rev-parse --verify HEAD # timeout=10
+Resetting working tree
+ > git reset --hard # timeout=10
+ > git clean -fdx # timeout=10
+Fetching without tags
+Fetching upstream changes from https://github.com/zhouji1993/devops-capstone.git
+ > git --version # timeout=10
+using GIT_ASKPASS to set credentials GitHub Access Token
+ > git fetch --no-tags --progress -- https://github.com/zhouji1993/devops-capstone.git +refs/heads/master:refs/remotes/origin/master # timeout=10
+Checking out Revision 963345728963125aa592214d7fd338603b5266ba (master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 963345728963125aa592214d7fd338603b5266ba # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D master # timeout=10
+ > git checkout -b master 963345728963125aa592214d7fd338603b5266ba # timeout=10
+Commit message: "Update create-cluster.yml"
+ > git rev-list --no-walk 963345728963125aa592214d7fd338603b5266ba # timeout=10
+Cleaning workspace
+ > git rev-parse --verify HEAD # timeout=10
+Resetting working tree
+ > git reset --hard # timeout=10
+ > git clean -fdx # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Lint HTML)
+[Pipeline] sh
++ tidy -q -e index.html
+[Pipeline] sh
++ echo jenkins
+jenkins
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Building image)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] isUnix
+[Pipeline] sh
++ docker build -t zhouji1993/capstone-project:33 .
+Sending build context to Docker daemon    2.3MB
+
+Step 1/3 : FROM nginx
+ ---> 602e111c06b6
+Step 2/3 : RUN rm /usr/share/nginx/html/index.html
+ ---> Using cache
+ ---> 8aa7613307ba
+Step 3/3 : COPY index.html /usr/share/nginx/html
+ ---> Using cache
+ ---> 352ebae305b0
+Successfully built 352ebae305b0
+Successfully tagged zhouji1993/capstone-project:33
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy Image)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withDockerRegistry
+$ docker login -u zhouji1993 -p ******** https://index.docker.io/v1/
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+WARNING! Your password will be stored unencrypted in /var/lib/jenkins/workspace/devops-capstone_master@tmp/9984b905-5036-414c-8e30-c8c2da2403d6/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[Pipeline] {
+[Pipeline] isUnix
+[Pipeline] sh
++ docker tag zhouji1993/capstone-project:33 index.docker.io/zhouji1993/capstone-project:33
+[Pipeline] isUnix
+[Pipeline] sh
++ docker push index.docker.io/zhouji1993/capstone-project:33
+The push refers to repository [docker.io/zhouji1993/capstone-project]
+54341852aee7: Preparing
+e0cc175b9c5f: Preparing
+b3003aac411c: Preparing
+216cf33c0a28: Preparing
+c2adabaecedb: Preparing
+216cf33c0a28: Layer already exists
+c2adabaecedb: Layer already exists
+b3003aac411c: Layer already exists
+54341852aee7: Layer already exists
+e0cc175b9c5f: Layer already exists
+33: digest: sha256:783de1990cf5ff8ddf23dc60a08cd2bab0c4ea4ee802d86c4bece5081b7507f6 size: 1362
+[Pipeline] }
+[Pipeline] // withDockerRegistry
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Configure and Build Kubernetes Cluster)
+[Pipeline] catchError
+[Pipeline] {
+[Pipeline] sh
++ sudo ansible-playbook ./playbooks/create-cluster.yml
+ [WARNING]: provided hosts list is empty, only localhost is available. Note
+that the implicit localhost does not match 'all'
+
+PLAY [127.0.0.1] ***************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [127.0.0.1]
+
+TASK [Get list of installed binaries] ******************************************
+changed: [127.0.0.1]
+
+TASK [Download eksctl] *********************************************************
+skipping: [127.0.0.1]
+
+TASK [Expand eksctl] ***********************************************************
+skipping: [127.0.0.1]
+
+TASK [Move eksctl to /usr/local/bin] *******************************************
+skipping: [127.0.0.1]
+
+TASK [Give users permission to execute eksctl] *********************************
+skipping: [127.0.0.1]
+
+TASK [Download aws-iam-authenticator] ******************************************
+skipping: [127.0.0.1]
+
+TASK [Move aws-iam-authenticator to /usr/local/bin] ****************************
+skipping: [127.0.0.1]
+
+TASK [Give users permission to execute] ****************************************
+skipping: [127.0.0.1]
+
+TASK [Download kubectl] ********************************************************
+skipping: [127.0.0.1]
+
+TASK [Move kubectl to /usr/local/bin] ******************************************
+skipping: [127.0.0.1]
+
+TASK [Give users permission to execute] ****************************************
+skipping: [127.0.0.1]
+
+TASK [Get existing cluster] ****************************************************
+changed: [127.0.0.1]
+
+TASK [debug] *******************************************************************
+ok: [127.0.0.1] => {
+    "msg": " No clusters found"
+}
+
+TASK [Setup clusters on 2 nodes] ***********************************************
+changed: [127.0.0.1]
+
+TASK [Update kubeconfig] *******************************************************
+fatal: [127.0.0.1]: FAILED! => {"changed": true, "cmd": ["aws", "eks", "--region", "us-west-2", "update-kubeconfig", "--name", "capstone-project"], "delta": "0:14:05.130492", "end": "2020-04-29 17:46:13.594866", "msg": "non-zero return code", "rc": 255, "start": "2020-04-29 17:32:08.464374", "stderr": "\nAn error occurred (InvalidSignatureException) when calling the DescribeCluster operation: Signature expired: 20200429T174018Z is now earlier than 20200429T174046Z (20200429T174546Z - 5 min.)", "stderr_lines": ["", "An error occurred (InvalidSignatureException) when calling the DescribeCluster operation: Signature expired: 20200429T174018Z is now earlier than 20200429T174046Z (20200429T174546Z - 5 min.)"], "stdout": "", "stdout_lines": []}
+	to retry, use: --limit @/var/lib/jenkins/workspace/devops-capstone_master/playbooks/create-cluster.retry
+
+PLAY RECAP *********************************************************************
+127.0.0.1                  : ok=5    changed=3    unreachable=0    failed=1   
+
+[Pipeline] }
+ERROR: script returned exit code 2
+[Pipeline] // catchError
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy Updated Image to Cluster)
+[Pipeline] catchError
+[Pipeline] {
+[Pipeline] sh
++ sudo kubectl apply -f ./deployments/deployment.yml
+deployment.apps/capstone-project created
+[Pipeline] sh
++ sudo kubectl apply -f ./deployments/load-balancer.yml
+service/capstone-project created
+[Pipeline] }
+[Pipeline] // catchError
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+
+GitHub has been notified of this commit¡¯s build result
+
+Finished: SUCCESS
