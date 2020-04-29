@@ -65,16 +65,7 @@
       block:
         - name: Setup clusters on 2 nodes
           command: >
-            eksctl create cluster
-            --name capstone-project
-            --version {{ kubernetes_version }}
-            --region us-west-2
-            --nodegroup-name worker-node
-            --node-type t3.small
-            --nodes 2
-            --nodes-min 1
-            --nodes-max 2
-            --node-ami auto
+            eksctl create cluster --name capstone-project --version {{ kubernetes_version }} --region us-west-2 --nodegroup-name worker-node --node-type t3.small --nodes 2 --nodes-min 1  --nodes-max 2  --node-ami jenkins
           become: no
         - name: Update kubeconfig
           command: aws eks --region us-west-2 update-kubeconfig --name capstone-project
